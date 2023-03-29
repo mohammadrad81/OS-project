@@ -1,0 +1,3 @@
+/media/mohammad/RADHDD/Documents/doroos-daneshgah/term-5/os/projects/xv6/xv6-riscv/cmake-build-debug/CMakeFiles/xv6_riscv_.dir
+/media/mohammad/RADHDD/Documents/doroos-daneshgah/term-5/os/projects/xv6/xv6-riscv/cmake-build-debug/CMakeFiles/edit_cache.dir
+/media/mohammad/RADHDD/Documents/doroos-daneshgah/term-5/os/projects/xv6/xv6-riscv/cmake-build-debug/CMakeFiles/rebuild_cache.dir
