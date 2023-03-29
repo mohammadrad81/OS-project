@@ -124,6 +124,7 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->start_tick = ticks;
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -680,4 +681,19 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+// Added by Mohammad Heydari Rad
+int getProcTick(int pid){
+    struct proc *p;
+    for(p = proc; p < &proc[NPROC]; p++) {
+        if (p->pid == pid) {
+            acquire(&tickslock);
+            acquire(&p->lock);
+            int difference = ticks - p->start_tick;
+            release(&tickslock);
+            release(&p->lock);
+            return difference;
+        }
+    }
+    return -1;
 }

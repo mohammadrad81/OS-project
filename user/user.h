@@ -22,6 +22,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+// Added by Mohammad Heydari Rad 9931017
+int getProcTick(int);
 
 // ulib.c
 int stat(const char*, struct stat*);
