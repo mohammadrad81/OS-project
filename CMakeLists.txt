@@ -82,4 +82,4 @@ add_executable(xv6_riscv_
         user/zombie.c
         LICENSE
         Makefile
-        README user/getProcTickTest.c)
+        README user/getProcTickTest.c kernel/sysInfo.h user/sysinfoTest.c)

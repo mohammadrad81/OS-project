@@ -80,3 +80,17 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+// Added by Mohammad Heydari Rad 9931017
+int freeram(){
+    int freepagecount = 0;
+    struct run *freelist;
+//    acquire(&(kmem.lock));
+    freelist = kmem.freelist;
+    while(freelist){
+        freepagecount ++;
+        freelist = freelist->next;
+    }
+//    release(&(kmem.lock));
+    return freepagecount * PGSIZE;
+}

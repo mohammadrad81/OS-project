@@ -6,6 +6,9 @@
 #include "proc.h"
 #include "defs.h"
 
+//Added by Mohammad Heydari Rad 9931017
+#include "sysInfo.h"
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -696,4 +699,28 @@ int getProcTick(int pid){
         }
     }
     return -1;
+}
+
+int active_processes(void){
+    int p_counter = 0;
+    struct proc *p;
+    for(p = proc; p < &proc[NPROC]; p++){
+        p_counter ++;
+    }
+    return p_counter;
+}
+
+int sysinfo(struct sysInfo* ptr){
+    printf("in sysinfo in proc.c file\n");
+    printf("pointer: %p\n", ptr);
+//    ptr -> uptime = ticks/100;
+//    printf("updated uptime\n");
+//    ptr -> totalram = (int)(PHYSTOP - KERNBASE);
+//    printf("updated totalram\n");
+//    ptr -> freeram = freeram();
+//    printf("updated free ram\n");
+//    ptr -> procs = active_processes();
+//    printf("updated active processes\n");
+    printf("end of sysinfo in proc.c file\n");
+    return 0;
 }

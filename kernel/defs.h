@@ -8,6 +8,8 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+//Added by Mohammad Heydari Rad 9931017
+struct sysInfo;
 
 // bio.c
 void            binit(void);
@@ -63,6 +65,8 @@ void            ramdiskrw(struct buf*);
 void*           kalloc(void);
 void            kfree(void *);
 void            kinit(void);
+//Added by Mohammad Heydari Rad 9931017
+int             freeram(void);
 
 // log.c
 void            initlog(int, struct superblock*);
@@ -108,6 +112,8 @@ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 // Added by Mohammad Heydari Rad 9931017
 int             getProcTick(int);
+int             active_processes(void);
+int             sysinfo(struct sysInfo*);
 
 // swtch.S
 void            swtch(struct context*, struct context*);

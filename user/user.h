@@ -1,4 +1,6 @@
 struct stat;
+// Added by Mohammad Heydari Rad 9931017
+struct sysInfo;
 
 // system calls
 int fork(void);
@@ -24,6 +26,7 @@ int sleep(int);
 int uptime(void);
 // Added by Mohammad Heydari Rad 9931017
 int getProcTick(int);
+int sysinfo(struct sysInfo*);
 
 // ulib.c
 int stat(const char*, struct stat*);
