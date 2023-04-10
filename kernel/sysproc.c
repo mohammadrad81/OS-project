@@ -101,11 +101,8 @@ uint64 sys_sysinfo(void){
 //    struct sysInfo info;
 //    struct sysInfo * ptr = &info;
     printf("in sys_sysinfo in sysproc.c file\n");
-    struct sysInfo * ptr = (struct sysInfo *)0; // just an initialization
-    printf("before argaddr: %p\n", ptr);
-    argaddr(0, (void*)&ptr);
-    printf("after argaddr: %p\n", ptr);
-    sysinfo(ptr);
+    uint64 addr;
+    argaddr(0, &addr);
     printf("end of sys_sysinfo in sysproc.c file\n");
-    return 0;
+    return sysinfo(addr);
 }

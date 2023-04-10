@@ -705,22 +705,34 @@ int active_processes(void){
     int p_counter = 0;
     struct proc *p;
     for(p = proc; p < &proc[NPROC]; p++){
-        p_counter ++;
+        acquire(&p->lock);
+        if(p->state != UNUSED){
+            p_counter++;
+        }
+        release(&p->lock);
     }
     return p_counter;
 }
 
-int sysinfo(struct sysInfo* ptr){
+int sysinfo(uint64 addr){
     printf("in sysinfo in proc.c file\n");
-    printf("pointer: %p\n", ptr);
-//    ptr -> uptime = ticks/100;
-//    printf("updated uptime\n");
-//    ptr -> totalram = (int)(PHYSTOP - KERNBASE);
-//    printf("updated totalram\n");
-//    ptr -> freeram = freeram();
-//    printf("updated free ram\n");
-//    ptr -> procs = active_processes();
-//    printf("updated active processes\n");
+    struct proc *p = myproc();
+    struct sysInfo info;
+    printf("address: \n", addr);
+    acquire(&tickslock);
+    printf("ticks: %d\n", ticks);
+    info.uptime = ticks/100;
+    release(&tickslock);
+    printf("updated uptime: %d\n", info.uptime);
+    info.totalram = (int)(PHYSTOP - KERNBASE);
+    printf("updated totalram: %d\n", info.totalram);
+    info.freeram = freeram();
+    printf("updated free ram: %d\n", info.freeram);
+    info.procs = active_processes();
+    printf("updated active processes: %d\n", info.procs);
     printf("end of sysinfo in proc.c file\n");
+    if(copyout(p->pagetable, addr, (char*)&info, sizeof (info))){
+        return -1;
+    }
     return 0;
 }

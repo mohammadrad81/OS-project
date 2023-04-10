@@ -26,7 +26,7 @@ int sleep(int);
 int uptime(void);
 // Added by Mohammad Heydari Rad 9931017
 int getProcTick(int);
-int sysinfo(struct sysInfo*);
+int sysinfo(uint64 addr);
 
 // ulib.c
 int stat(const char*, struct stat*);

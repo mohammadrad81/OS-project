@@ -85,12 +85,12 @@ kalloc(void)
 int freeram(){
     int freepagecount = 0;
     struct run *freelist;
-//    acquire(&(kmem.lock));
+    acquire(&kmem.lock);
     freelist = kmem.freelist;
     while(freelist){
         freepagecount ++;
         freelist = freelist->next;
     }
-//    release(&(kmem.lock));
+    release(&kmem.lock);
     return freepagecount * PGSIZE;
 }

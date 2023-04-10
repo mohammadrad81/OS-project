@@ -113,7 +113,7 @@ void            procdump(void);
 // Added by Mohammad Heydari Rad 9931017
 int             getProcTick(int);
 int             active_processes(void);
-int             sysinfo(struct sysInfo*);
+int             sysinfo(uint64);
 
 // swtch.S
 void            swtch(struct context*, struct context*);
