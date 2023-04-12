@@ -15,4 +15,3 @@ mkfs
 kernel/kernel
 user/usys.S
 .gdbinit
-.idea

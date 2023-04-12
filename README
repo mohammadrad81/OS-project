@@ -1,0 +1,2 @@
+# Operating System project phase 1
+-in this phase, we added two system calls to the xv6 os, getProcTick and sysinfo
