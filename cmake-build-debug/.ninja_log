@@ -1,0 +1,14 @@
+# ninja log v5
+2	20	1681155217812528611	CMakeFiles/xv6_riscv_.dir/kernel/plic.c.o	ff0d82364837265e
+0	22	1681155217812528611	CMakeFiles/xv6_riscv_.dir/kernel/bio.c.o	387b092c3973804a
+1	25	1681155217812528611	CMakeFiles/xv6_riscv_.dir/kernel/kalloc.c.o	78309be5a8ed88e5
+0	25	1681155217820529063	CMakeFiles/xv6_riscv_.dir/kernel/console.c.o	848f42415417be0f
+0	26	1681155217820529063	CMakeFiles/xv6_riscv_.dir/kernel/exec.c.o	c1f04404560d9d4c
+1	31	1681155217816528837	CMakeFiles/xv6_riscv_.dir/kernel/main.c.o	b8d30f57b30fd618
+0	35	1681155217824529288	CMakeFiles/xv6_riscv_.dir/kernel/file.c.o	ff6328c89e5486d3
+1	44	1681155217836529966	CMakeFiles/xv6_riscv_.dir/kernel/log.c.o	45e987133e218a
+1	48	1681155217840530191	CMakeFiles/xv6_riscv_.dir/kernel/pipe.c.o	ee98815a74410ad6
+25	49	1681155217840530191	CMakeFiles/xv6_riscv_.dir/kernel/sleeplock.c.o	22ee2643e9c9c489
+20	50	1681155217844530418	CMakeFiles/xv6_riscv_.dir/kernel/printf.c.o	31cb49e70d6fca38
+1	53	1681155217848530644	CMakeFiles/xv6_riscv_.dir/kernel/fs.c.o	688e5b73b08debad
+38	60	1681155217856531095	CMakeFiles/xv6_riscv_.dir/kernel/string.c.o	bb0daa437831c650
