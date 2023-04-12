@@ -98,11 +98,7 @@ sys_getProcTick(void){
 }
 
 uint64 sys_sysinfo(void){
-//    struct sysInfo info;
-//    struct sysInfo * ptr = &info;
-    printf("in sys_sysinfo in sysproc.c file\n");
     uint64 addr;
     argaddr(0, &addr);
-    printf("end of sys_sysinfo in sysproc.c file\n");
     return sysinfo(addr);
 }

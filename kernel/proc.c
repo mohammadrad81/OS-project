@@ -717,22 +717,14 @@ int active_processes(void){
 }
 
 int sysinfo(uint64 addr){
-    printf("in sysinfo in proc.c file\n");
     struct proc *p = myproc();
     struct sysInfo info;
-    printf("address: \n", addr);
     acquire(&tickslock);
-    printf("ticks: %d\n", ticks);
     info.uptime = ticks/100;
     release(&tickslock);
-    printf("updated uptime: %d\n", info.uptime);
     info.totalram = (int)(PHYSTOP - KERNBASE);
-    printf("updated totalram: %d\n", info.totalram);
     info.freeram = freeram();
-    printf("updated free ram: %d\n", info.freeram);
     info.procs = active_processes();
-    printf("updated active processes: %d\n", info.procs);
-    printf("end of sysinfo in proc.c file\n");
     if(copyout(p->pagetable, addr, (char*)&info, sizeof (info))){
         return -1;
     }
