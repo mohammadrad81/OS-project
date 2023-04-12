@@ -105,5 +105,5 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 
-  int start_tick;              // The tick the process is created at
+  uint start_tick;              // The tick the process is created at
 };
