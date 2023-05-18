@@ -207,6 +207,7 @@ devintr()
 
     if(cpuid() == 0){
       clockintr();
+      increase_procs_ticks();
     }
     
     // acknowledge the software interrupt by clearing

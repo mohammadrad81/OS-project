@@ -703,6 +703,25 @@ int getProcTick(int pid){
     return -1;
 }
 
+int increase_procs_ticks(void){
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++){
+    if (p->state == SLEEPING){
+      p->sleeping_tick ++;
+    }
+    else if(p->state == RUNNABLE){
+      p->ready_tick ++;
+    }
+    else if(p->state == RUNNING){
+      p->running_tick++;
+    }
+    else if(p->state == ZOMBIE){
+      p->termination_tick = p->running_tick;
+    }
+  }
+  return 0;
+}
+
 int active_processes(void){
     int p_counter = 0;
     struct proc *p;

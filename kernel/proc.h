@@ -106,4 +106,17 @@ struct proc {
   char name[16];               // Process name (debugging)
 
   uint start_tick;              // The tick the process is created at
+  uint termination_tick;        // The tick the process is terminated at
+  uint running_tick;            // How many ticks the process was in RUNNING mode
+  uint ready_tick;              // How many ticks the process was in RUNNABLE mode
+  uint sleeping_tick;           // How many ticks the process was in SLEEP mode
 };
+
+struct proc_ticks{
+  int pid;
+  uint start_tick;
+  uint termination_tick;
+  uint running_tick;
+  uint ready_tick;
+  uint sleeping_tick;
+}

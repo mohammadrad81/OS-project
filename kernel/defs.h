@@ -114,6 +114,7 @@ void            procdump(void);
 int             getProcTick(int);
 int             active_processes(void);
 int             sysinfo(uint64);
+int             increase_procs_ticks(void);
 
 // swtch.S
 void            swtch(struct context*, struct context*);
