@@ -30,8 +30,7 @@
 // called by printf(), and to echo input characters,
 // but not from write().
 //
-void
-consputc(int c)
+;void consputc(int c)
 {
   if(c == BACKSPACE){
     // if the user typed backspace, overwrite with a space.

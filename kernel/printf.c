@@ -15,7 +15,7 @@
 #include "defs.h"
 #include "proc.h"
 
-volatile int panicked = 0;
+;volatile int panicked = 0;
 
 // lock to avoid interleaving concurrent printf's.
 static struct {

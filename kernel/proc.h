@@ -119,4 +119,4 @@ struct proc_ticks{
   uint running_tick;
   uint ready_tick;
   uint sleeping_tick;
-}
+};
