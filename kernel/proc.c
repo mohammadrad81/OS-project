@@ -796,3 +796,13 @@ int sysinfo(uint64 addr){
     }
     return 0;
 }
+
+int sched_RR(void){
+  scheduling_algorithm = RR;
+  return 0;
+}
+
+int sched_FCFS(void){
+  scheduling_algorithm = FCFS;
+  return 0;
+}

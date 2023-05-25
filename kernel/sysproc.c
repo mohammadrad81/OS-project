@@ -102,3 +102,11 @@ uint64 sys_sysinfo(void){
     argaddr(0, &addr);
     return sysinfo(addr);
 }
+
+uint64 sys_sched_RR(void){
+  return sched_RR();
+}
+
+uint64 sys_sched_FCFS(void){
+  return sched_FCFS();
+}

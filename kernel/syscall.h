@@ -24,3 +24,5 @@
 // Added by Mohammad Heydari Rad 9931017
 #define SYS_getProcTick 22
 #define SYS_sysinfo 23
+#define SYS_sched_RR 24
+#define SYS_sched_FCFS 25
