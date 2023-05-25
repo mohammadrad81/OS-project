@@ -79,6 +79,8 @@ struct trapframe {
   /* 280 */ uint64 t6;
 };
 
+enum sched_algo {RR, FCFS};
+
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state

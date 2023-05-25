@@ -8,12 +8,15 @@
 
 //Added by Mohammad Heydari Rad 9931017
 #include "sysInfo.h"
+int sh_or_init = 1;
 
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
 
 struct proc *initproc;
+
+enum sched_algo scheduling_algorithm = FCFS;
 
 int nextpid = 1;
 struct spinlock pid_lock;
@@ -447,32 +450,76 @@ wait(uint64 addr)
 //  - swtch to start running that process.
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
+
+// added by Mohammad Heydari Rad & Chamrun Moinie Naghde
+
+
+void round_robin(struct cpu *c){
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if(p->state == RUNNABLE) {
+      // Switch to chosen process.  It is the process's job
+      // to release its lock and then reacquire it
+      // before jumping back to us.
+      p->state = RUNNING;
+      c->proc = p;
+      swtch(&c->context, &p->context);
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+    }
+    release(&p->lock);
+  }
+}
+
+void fcfs(struct cpu *c){
+  struct proc *to_run = proc;
+  struct proc *p = 0;
+  long minimum_ticks = 999999999999;
+  int firstProcess = 0;
+  for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if(p->state == RUNNABLE){
+      if(!firstProcess && p->pid < 2){
+        to_run = p;
+        firstProcess = 1;
+      }
+      else if(p->start_tick < minimum_ticks && p->pid >= 2){
+        to_run = p;
+        minimum_ticks =  p->start_tick;
+        firstProcess = 1;
+      }
+    }
+    release(&p->lock);
+  }
+  acquire(&to_run->lock);
+  if(to_run->state == RUNNABLE){
+    to_run->state = RUNNING;
+    c->proc = to_run;
+    swtch(&c->context, &to_run->context);
+
+    c->proc = 0;
+  }
+  release(&to_run->lock);
+}
+
+
 void
 scheduler(void)
 {
-  struct proc *p;
+  // struct proc *p;
   struct cpu *c = mycpu();
   
   c->proc = 0;
   for(;;){
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
-
-    for(p = proc; p < &proc[NPROC]; p++) {
-      acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
-
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
-      }
-      release(&p->lock);
+    if(scheduling_algorithm == RR){
+      round_robin(c);
+    }
+    else if(scheduling_algorithm == FCFS){
+      fcfs(c);
     }
   }
 }
