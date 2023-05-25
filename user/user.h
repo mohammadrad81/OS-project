@@ -27,6 +27,8 @@ int uptime(void);
 // Added by Mohammad Heydari Rad 9931017
 int getProcTick(int);
 int sysinfo(uint64 addr);
+int sched_RR();
+int sched_FCFS();
 
 // ulib.c
 int stat(const char*, struct stat*);

@@ -134,6 +134,8 @@ UPROGS=\
 	$U/_zombie\
 	$U/_getProcTickTest\
 	$U/_sysinfoTest\
+	$U/_ch_sched\
+	
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

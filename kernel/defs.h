@@ -117,6 +117,8 @@ int             getProcTick(int);
 int             active_processes(void);
 int             sysinfo(uint64);
 int             increase_procs_ticks(void);
+int             sched_RR(void);
+int             sched_FCFS(void);
 
 // swtch.S
 void            swtch(struct context*, struct context*);

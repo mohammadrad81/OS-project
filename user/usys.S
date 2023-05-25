@@ -115,3 +115,13 @@ sysinfo:
  li a7, SYS_sysinfo
  ecall
  ret
+.global sched_RR
+sched_RR:
+ li a7, SYS_sched_RR
+ ecall
+ ret
+.global sched_FCFS
+sched_FCFS:
+ li a7, SYS_sched_FCFS
+ ecall
+ ret
