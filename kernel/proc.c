@@ -16,6 +16,8 @@ struct proc proc[NPROC];
 
 struct proc *initproc;
 
+enum sched_algo scheduling_algorithm = FCFS;
+
 int nextpid = 1;
 struct spinlock pid_lock;
 
@@ -450,103 +452,74 @@ wait(uint64 addr)
 //    via swtch back to the scheduler.
 
 // added by Mohammad Heydari Rad & Chamrun Moinie Naghde
-void dispatch_process(struct cpu* c, struct proc* p){
-  p->state = RUNNING;
-  c->proc = p;
-  printf("before swtch\npid: %d\n", p->pid);
-  printf("process name: %s\n", p->name);
-  swtch(&c->context, &p->context);
-  printf("after swtch");
-}
 
-void fcfs_scheduler(){
-  void* null = (void*) 0;
-  struct proc *p = null;
-  struct cpu *c = mycpu();
-  struct proc *to_run = null;
-  int found_other_than_init_sh = 0;
-  int found_any = 0;
-  c->proc = 0;
-  for(;;){
-    found_other_than_init_sh = 0;
-    found_any = 0;
-    // Avoid deadlock by ensuring that devices can interrupt.
-    intr_on();
-    // find which process to start
-    for(p = proc; p < &proc[NPROC]; p++){
-      printf("acquiring process with pid: %d\n", p->pid);
-      acquire(&p->lock);
-    }
-    for(p = proc; p < &proc[NPROC]; p++) {
-      if(p->state == RUNNABLE) {
-        printf("runnable pid: %d\n", p->pid);
-        if(p->pid == sh_or_init && found_any == 0 && to_run == null){
-          printf("entered first if\n");
-          found_any = 1;
-          to_run = p;
-          sh_or_init = 2 - sh_or_init;
-          printf("in first if\n");
-        }
-        else if(p->pid >= 2){
-          if(found_other_than_init_sh == 0){
-            found_any = 1;
-            found_other_than_init_sh = 1;
-            to_run = p;
-            printf("in first else if's first if\n");
-          }
-          else if(to_run != null && p->start_tick < to_run->start_tick){
-            to_run = p;
-            printf("in first else if's else if\n");
-          }
-        }
-        if(to_run != null){
-          printf("to_run pid: %d\n", to_run->pid);
-        }
 
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-      }
+void round_robin(struct cpu *c){
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    acquire(&p->lock);
+    if(p->state == RUNNABLE) {
+      // Switch to chosen process.  It is the process's job
+      // to release its lock and then reacquire it
+      // before jumping back to us.
+      p->state = RUNNING;
+      c->proc = p;
+      swtch(&c->context, &p->context);
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
     }
-    for(p = proc; p < &proc[NPROC]; p++){
-      if(p->pid != to_run->pid || to_run == null){
-        release(&p->lock);
-      }
-    }
-    dispatch_process(c, p);
-    c->proc = 0;
     release(&p->lock);
   }
 }
 
+void fcfs(struct cpu *c){
+  struct proc *to_run = proc;
+  struct proc *p = 0;
+  long minimum_ticks = 999999999999;
+  int firstProcess = 0;
+  for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if(p->state == RUNNABLE){
+      if(!firstProcess && p->pid < 2){
+        to_run = p;
+        firstProcess = 1;
+      }
+      else if(p->start_tick < minimum_ticks && p->pid >= 2){
+        to_run = p;
+        minimum_ticks =  p->start_tick;
+        firstProcess = 1;
+      }
+    }
+    release(&p->lock);
+  }
+  acquire(&to_run->lock);
+  if(to_run->state == RUNNABLE){
+    to_run->state = RUNNING;
+    c->proc = to_run;
+    swtch(&c->context, &to_run->context);
+
+    c->proc = 0;
+  }
+  release(&to_run->lock);
+}
+
+
 void
 scheduler(void)
 {
-  struct proc *p;
+  // struct proc *p;
   struct cpu *c = mycpu();
   
   c->proc = 0;
   for(;;){
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
-
-    for(p = proc; p < &proc[NPROC]; p++) {
-      acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
-
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
-      }
-      release(&p->lock);
+    if(scheduling_algorithm == RR){
+      round_robin(c);
+    }
+    else if(scheduling_algorithm == FCFS){
+      fcfs(c);
     }
   }
 }
