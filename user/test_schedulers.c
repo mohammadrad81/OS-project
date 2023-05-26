@@ -1,6 +1,5 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
-#include "user/user.h"
 #include "user.h"
 
 
@@ -34,13 +33,12 @@ void childProc() {
 
     for (int i = 0; i < ARRAY_LENGTH; i++) {
         array1[i] = 14232;
-        array2[i] = 14232;
+        array2[i] = 34564;
     }
 
     // Calculate sum of arrays
     int sum = calculateSum(array1, ARRAY_LENGTH) + calculateSum(array2, ARRAY_LENGTH);
-    sum++;
-//    printf("%d ", sum);
+    sum = sum;  //  To prevent error: unused variable ‘sum’
 }
 
 double calculateAverage(unsigned int *times, int length) {
@@ -68,7 +66,6 @@ void runProcesses() {
 
         if (pid == 0) {
             // Child process
-//            printf("starting %dth...\n", i);
             childProc();
             exit(0);
 
@@ -77,10 +74,22 @@ void runProcesses() {
             child_ids[i] = pid;
         }
     }
-
-
+//
+//    sleep(5);
     for (int i = 0; i < NUM_PROCESSES; i++) {
-        printf("%d) pid: %d\n", i, child_ids[i]);
+//        printf("%d) pid: %d\n", i, child_ids[i]);
+
+        int waitingTicks = getProcWaitingTicks(child_ids[i]);
+        int turnaroundTicks = getProcTurnaroundTicks(child_ids[i]);
+
+        printf("%d) turnaroundTicks: %d\n", child_ids[i], turnaroundTicks);
+        printf("%d) waitingTicks: %d\n", child_ids[i], waitingTicks);
+
+        waiting_times[i] = waitingTicks;
+        turnaround_times[i] = turnaroundTicks;
+
+
+
     }
 
 //     Calculate average waiting time and turnaround time

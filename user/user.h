@@ -26,6 +26,8 @@ int sleep(int);
 int uptime(void);
 // Added by Mohammad Heydari Rad 9931017
 int getProcTick(int);
+int getProcTurnaroundTicks(int);
+int getProcWaitingTicks(int);
 int sysinfo(uint64 addr);
 int sched_RR();
 int sched_FCFS();

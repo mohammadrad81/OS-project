@@ -26,3 +26,5 @@
 #define SYS_sysinfo 23
 #define SYS_sched_RR 24
 #define SYS_sched_FCFS 25
+#define SYS_getProcTurnaroundTicks 26
+#define SYS_getProcWaitingTicks 27

@@ -102,6 +102,8 @@ extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_getProcTick(void);
+extern uint64 sys_getProcTurnaroundTicks(void);
+extern uint64 sys_getProcWaitingTicks(void);
 extern uint64 sys_sysinfo(void);
 extern uint64 sys_sched_RR(void);
 extern uint64 sys_sched_FCFS(void);
@@ -133,7 +135,9 @@ static uint64 (*syscalls[])(void) = {
 [SYS_getProcTick]  sys_getProcTick,
 [SYS_sysinfo] sys_sysinfo,
 [SYS_sched_RR] sys_sched_RR,
-[SYS_sched_FCFS] sys_sched_FCFS
+[SYS_sched_FCFS] sys_sched_FCFS,
+[SYS_getProcTurnaroundTicks]  sys_getProcTurnaroundTicks,
+[SYS_getProcWaitingTicks]  sys_getProcWaitingTicks
 };
 
 void

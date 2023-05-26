@@ -37,6 +37,8 @@ entry("sbrk");
 entry("sleep");
 entry("uptime");
 entry("getProcTick");
+entry("getProcTurnaroundTicks");
+entry("getProcWaitingTicks");
 entry("sysinfo");
 entry("sched_RR");
 entry("sched_FCFS");

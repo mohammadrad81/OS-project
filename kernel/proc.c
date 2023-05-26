@@ -750,6 +750,39 @@ int getProcTick(int pid){
     return -1;
 }
 
+// Added by ChamRun Moeini
+int getProcTurnaroundTicks(int pid){
+    struct proc *p;
+    for(p = proc; p < &proc[NPROC]; p++) {
+        if (p->pid == pid) {
+            acquire(&tickslock);
+            acquire(&p->lock);
+            int turnaroundTime = p->termination_tick - p->start_tick;
+            release(&tickslock);
+            release(&p->lock);
+            return turnaroundTime;
+        }
+    }
+    return -1;
+}
+
+
+// Added by ChamRun Moeini
+int getProcWaitingTicks(int pid){
+    struct proc *p;
+    for(p = proc; p < &proc[NPROC]; p++) {
+        if (p->pid == pid) {
+            acquire(&tickslock);
+            acquire(&p->lock);
+            int turnaroundTime = p->ready_tick;
+            release(&tickslock);
+            release(&p->lock);
+            return turnaroundTime;
+        }
+    }
+    return -1;
+}
+
 int increase_procs_ticks(void){
   struct proc *p;
   for(p = proc; p < &proc[NPROC]; p++){
