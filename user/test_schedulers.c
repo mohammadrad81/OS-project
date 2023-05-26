@@ -4,7 +4,7 @@
 
 
 #define NUM_PROCESSES 32
-#define ARRAY_LENGTH 10000
+#define ARRAY_LENGTH 100
 
 
 void runProcesses();
@@ -41,11 +41,11 @@ void childProc() {
     sum = sum;  //  To prevent error: unused variable ‘sum’
 }
 
-double calculateAverage(unsigned int *times, int length) {
+double calculateAverage(unsigned int *arr, int length) {
     unsigned int sum = 0;
 
     for (int i = 0; i < length; i++) {
-        sum += times[i];
+        sum += arr[i];
     }
     printf("5. calculateAverage...\n");
     printf("sum: %d\n", sum);
@@ -74,10 +74,9 @@ void runProcesses() {
             child_ids[i] = pid;
         }
     }
-//
-//    sleep(5);
+
+    sleep(5);
     for (int i = 0; i < NUM_PROCESSES; i++) {
-//        printf("%d) pid: %d\n", i, child_ids[i]);
 
         int waitingTicks = getProcWaitingTicks(child_ids[i]);
         int turnaroundTicks = getProcTurnaroundTicks(child_ids[i]);
@@ -88,15 +87,13 @@ void runProcesses() {
         waiting_times[i] = waitingTicks;
         turnaround_times[i] = turnaroundTicks;
 
-
-
     }
 
 //     Calculate average waiting time and turnaround time
-    printf("avg_waiting_time...\n");
-    double avg_waiting_time = calculateAverage(waiting_times, NUM_PROCESSES);
     printf("avg_turnaround_time...\n");
     double avg_turnaround_time = calculateAverage(turnaround_times, NUM_PROCESSES);
+    printf("avg_waiting_time...\n");
+    double avg_waiting_time = calculateAverage(waiting_times, NUM_PROCESSES);
 
     sleep(5);
     printf("Average Waiting Time: %.2f microseconds\n", avg_waiting_time);
