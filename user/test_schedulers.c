@@ -22,26 +22,33 @@ void childProc() {
     int array2[ARRAY_LENGTH];
 
     for (int i = 0; i < ARRAY_LENGTH; i++) {
-        array1[i] = 90184;
-        array1[i] = 57128;
+        array1[i] = 14232;
+        array2[i] = 14232;
     }
 
     // Calculate sum of arrays
     int sum = calculateSum(array1, ARRAY_LENGTH) + calculateSum(array2, ARRAY_LENGTH);
-    printf("%d ", sum);
+    sum++;
+//    printf("%d ", sum);
 }
 
 double calculateAverage(unsigned int *times, int length) {
     unsigned int sum = 0;
+
     for (int i = 0; i < length; i++) {
         sum += times[i];
     }
-    return (double) sum / length;
+    printf("5. calculateAverage...\n");
+    printf("sum: %d\n", sum);
+    printf("length: %d\n", length);
+    double avg = (double) sum / length;
+    printf("6. calculateAverage...\n");
+    return avg;
 }
 
 int main() {
-//    unsigned int waiting_times[NUM_PROCESSES];
-//    unsigned int turnaround_times[NUM_PROCESSES];
+    unsigned int waiting_times[NUM_PROCESSES];
+    unsigned int turnaround_times[NUM_PROCESSES];
     unsigned int child_ids[NUM_PROCESSES];
 
     for (int i = 0; i < NUM_PROCESSES; i++) {
@@ -50,25 +57,28 @@ int main() {
 
         if (pid == 0) {
             // Child process
-            printf("starting %dth...\n", i);
+//            printf("starting %dth...\n", i);
             childProc();
+            exit(0);
 
         } else {
+            // Parent process
             child_ids[i] = pid;
-            } else {
-                fprintf(stderr, "Child process %d terminated abnormally.\n", pid);
-                exit(1);
-            }
         }
     }
+
 
     for (int i = 0; i < NUM_PROCESSES; i++) {
         printf("%d) pid: %d\n", i, child_ids[i]);
     }
+
 //     Calculate average waiting time and turnaround time
+    printf("avg_waiting_time...\n");
     double avg_waiting_time = calculateAverage(waiting_times, NUM_PROCESSES);
+    printf("avg_turnaround_time...\n");
     double avg_turnaround_time = calculateAverage(turnaround_times, NUM_PROCESSES);
 
+    sleep(5);
     printf("Average Waiting Time: %.2f microseconds\n", avg_waiting_time);
     printf("Average Turnaround Time: %.2f microseconds\n", avg_turnaround_time);
 
