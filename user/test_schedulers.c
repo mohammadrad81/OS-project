@@ -8,6 +8,17 @@
 #define ARRAY_LENGTH 10000
 
 
+void runProcesses();
+
+int main() {
+
+    runProcesses();
+    sched_FCFS();
+    runProcesses();
+
+    exit(0);
+}
+
 int calculateSum(int *arr, int length) {
     int sum = 0;
     for (int i = 0; i < length; i++) {
@@ -46,7 +57,7 @@ double calculateAverage(unsigned int *times, int length) {
     return avg;
 }
 
-int main() {
+void runProcesses() {
     unsigned int waiting_times[NUM_PROCESSES];
     unsigned int turnaround_times[NUM_PROCESSES];
     unsigned int child_ids[NUM_PROCESSES];
@@ -81,6 +92,4 @@ int main() {
     sleep(5);
     printf("Average Waiting Time: %.2f microseconds\n", avg_waiting_time);
     printf("Average Turnaround Time: %.2f microseconds\n", avg_turnaround_time);
-
-    return 0;
 }
