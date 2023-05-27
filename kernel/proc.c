@@ -828,7 +828,7 @@ int increase_procs_ticks(void){
       p->ready_tick ++;
     }
     else if(p->state == RUNNING){
-      p->running_tick++;
+      p->running_tick ++;
     }
     else if(p->state == ZOMBIE){
       p->termination_tick = ticks;

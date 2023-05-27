@@ -3,7 +3,7 @@
 #include "user.h"
 
 #define PROCESS_COUNT 32
-#define ARRAY_SIZE 100000
+#define ARRAY_SIZE 1000
 
 int calculate_sum(int *arr, int length) {
     int sum = 0;
@@ -13,17 +13,19 @@ int calculate_sum(int *arr, int length) {
     return sum;
 }
 
-void job(){
-    int arr_1[ARRAY_SIZE];
-    for(int i = 0; i < ARRAY_SIZE; i++){
-        arr_1[i] = i;
-    }
+int job(){
+    long counter = 0;
     for(int i = 0; i < ARRAY_SIZE; i++){
         for(int j = 0; j < ARRAY_SIZE; j++){
-            calculate_sum(arr_1, ARRAY_SIZE);
+            for(int k = 0; k < ARRAY_SIZE; k++){
+                // for(int q = 0; q < ARRAY_SIZE; q++){
+                    counter++;
+                // }
+            }
         }
     }
-    sleep(50);
+    // printf("counter: %d\n", counter);
+    return counter;
 }
 
 void runProcesses(char* algorithm_name){
@@ -37,9 +39,13 @@ void runProcesses(char* algorithm_name){
         pipe(fds[i]);
         int child_pid = fork();
         if(child_pid == 0){ //child
-            job();
-            close(fds[i][0]); //close read for child
             int my_pid = getpid();
+            printf("process with pid created: %d\n", my_pid);
+            int sum = job();
+            printf("%d\n", sum);
+            printf("job for pid: %d done!\n", my_pid);
+            close(fds[i][0]); //close read for child
+            
             int turn_around_time = getProcTick(my_pid);
             int waiting_time = getProcWaitingTicks(my_pid);
             int ready_time = getProcReadyTicks(my_pid);
