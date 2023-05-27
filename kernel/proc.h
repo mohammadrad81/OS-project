@@ -82,7 +82,7 @@ struct trapframe {
 enum sched_algo {RR, FCFS};
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
-
+//            terminated  new    waiting    ready    running   zombie
 // Per-process state
 struct proc {
   struct spinlock lock;

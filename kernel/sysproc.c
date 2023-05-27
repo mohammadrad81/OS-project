@@ -97,6 +97,22 @@ sys_getProcTick(void){
     return getProcTick(pid);
 }
 
+uint64
+sys_getProcTurnaroundTicks(void){
+    int pid;
+    argint(0, &pid);
+    return getProcTurnaroundTicks(pid);
+}
+
+
+uint64
+sys_getProcWaitingTicks(void){
+    int pid;
+    argint(0, &pid);
+    return getProcWaitingTicks(pid);
+}
+
+
 uint64 sys_sysinfo(void){
     uint64 addr;
     argaddr(0, &addr);
@@ -109,4 +125,16 @@ uint64 sys_sched_RR(void){
 
 uint64 sys_sched_FCFS(void){
   return sched_FCFS();
+}
+
+uint64 sys_getProcReadyTicks(void){
+  int pid;
+  argint(0, &pid);
+  return getProcReadyTicks(pid);
+}
+
+uint64 sys_getProcRunningTicks(void){
+  int pid;
+  argint(0, &pid);
+  return getProcRunningTicks(pid);
 }

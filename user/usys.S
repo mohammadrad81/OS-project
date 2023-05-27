@@ -110,6 +110,26 @@ getProcTick:
  li a7, SYS_getProcTick
  ecall
  ret
+.global getProcTurnaroundTicks
+getProcTurnaroundTicks:
+ li a7, SYS_getProcTurnaroundTicks
+ ecall
+ ret
+.global getProcWaitingTicks
+getProcWaitingTicks:
+ li a7, SYS_getProcWaitingTicks
+ ecall
+ ret
+.global getProcReadyTicks
+getProcReadyTicks:
+ li a7, SYS_getProcReadyTicks
+ ecall
+ ret
+.global getProcRunningTicks
+getProcRunningTicks:
+ li a7, SYS_getProcRunningTicks
+ ecall
+ ret
 .global sysinfo
 sysinfo:
  li a7, SYS_sysinfo

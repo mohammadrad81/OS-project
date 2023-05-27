@@ -114,6 +114,10 @@ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 // Added by Mohammad Heydari Rad 9931017
 int             getProcTick(int);
+int             getProcTurnaroundTicks(int);
+int             getProcWaitingTicks(int);
+int             getProcReadyTicks(int);
+int             getProcRunningTicks(int);
 int             active_processes(void);
 int             sysinfo(uint64);
 int             increase_procs_ticks(void);
