@@ -132,6 +132,9 @@ found:
   p->state = USED;
   acquire(&tickslock);
   p->start_tick = ticks;
+  p->sleeping_tick = 0;
+  p->running_tick = 0;
+  p->ready_tick = 0;
   release(&tickslock);
 
   // Allocate a trapframe page.
@@ -775,6 +778,7 @@ int getProcWaitingTicks(int pid){
             acquire(&tickslock);
             acquire(&p->lock);
             int waiting_tick = p->sleeping_tick;
+            printf("waiting: %d\n", waiting_tick);
             release(&tickslock);
             release(&p->lock);
             return waiting_tick;

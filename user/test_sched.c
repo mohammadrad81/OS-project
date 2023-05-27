@@ -3,7 +3,7 @@
 #include "user.h"
 
 #define PROCESS_COUNT 32
-#define ARRAY_SIZE 10000
+#define ARRAY_SIZE 100000
 
 int calculate_sum(int *arr, int length) {
     int sum = 0;
@@ -14,11 +14,16 @@ int calculate_sum(int *arr, int length) {
 }
 
 void job(){
-    int arr_1[ARRAY_SIZE] = {0};
-    int arr_2[ARRAY_SIZE] = {0};
-    calculate_sum(arr_1, ARRAY_SIZE);
-    calculate_sum(arr_2, ARRAY_SIZE);
-
+    int arr_1[ARRAY_SIZE];
+    for(int i = 0; i < ARRAY_SIZE; i++){
+        arr_1[i] = i;
+    }
+    for(int i = 0; i < ARRAY_SIZE; i++){
+        for(int j = 0; j < ARRAY_SIZE; j++){
+            calculate_sum(arr_1, ARRAY_SIZE);
+        }
+    }
+    sleep(50);
 }
 
 void runProcesses(char* algorithm_name){
@@ -32,13 +37,13 @@ void runProcesses(char* algorithm_name){
         pipe(fds[i]);
         int child_pid = fork();
         if(child_pid == 0){ //child
+            job();
             close(fds[i][0]); //close read for child
             int my_pid = getpid();
-            int pid = getpid();
-            int turn_around_time = getProcTick(pid);
-            int waiting_time = getProcWaitingTicks(pid);
-            int ready_time = getProcReadyTicks(pid);
-            int running_time = getProcRunningTicks(pid);
+            int turn_around_time = getProcTick(my_pid);
+            int waiting_time = getProcWaitingTicks(my_pid);
+            int ready_time = getProcReadyTicks(my_pid);
+            int running_time = getProcRunningTicks(my_pid);
             printf("process with pid: %d, turnaround time: %d\n", my_pid, turn_around_time);
             printf("process with pid: %d, waiting time: %d\n", my_pid, waiting_time);
             printf("process with pid: %d, ready time: %d\n", my_pid, ready_time);
@@ -71,16 +76,16 @@ void runProcesses(char* algorithm_name){
         running_times[i] = running_t;
         wait(&status);
     }
-    double ave_turnaround_time = ((double)calculate_sum(turnaround_times, PROCESS_COUNT)) / PROCESS_COUNT;
-    double ave_waiting_time = ((double)calculate_sum(waiting_times, PROCESS_COUNT)) / PROCESS_COUNT;
-    double ave_ready_time = ((double)calculate_sum(ready_times, PROCESS_COUNT)) / PROCESS_COUNT;
-    double ave_running_time = ((double)calculate_sum(running_times, PROCESS_COUNT)) / PROCESS_COUNT;
+    int ave_turnaround_time = (calculate_sum(turnaround_times, PROCESS_COUNT)) / PROCESS_COUNT;
+    int ave_waiting_time = (calculate_sum(waiting_times, PROCESS_COUNT)) / PROCESS_COUNT;
+    int ave_ready_time = (calculate_sum(ready_times, PROCESS_COUNT)) / PROCESS_COUNT;
+    int ave_running_time = (calculate_sum(running_times, PROCESS_COUNT)) / PROCESS_COUNT;
     
     printf("TEST RESULT FOR ALGORITHM: %s:\n", algorithm_name);
-    printf("average turnaround time: %f\n", ave_turnaround_time);
-    printf("average waiting time: %f\n", ave_waiting_time);
-    printf("average ready time: %f\n", ave_ready_time);
-    printf("average running time: %f\n", ave_running_time);
+    printf("average turnaround time: %d\n", ave_turnaround_time);
+    printf("average waiting time: %d\n", ave_waiting_time);
+    printf("average ready time: %d\n", ave_ready_time);
+    printf("average running time: %d\n", ave_running_time);
 
 }
 
