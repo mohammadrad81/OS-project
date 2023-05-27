@@ -16,7 +16,7 @@ struct proc proc[NPROC];
 
 struct proc *initproc;
 
-enum sched_algo scheduling_algorithm = FCFS;
+enum sched_algo scheduling_algorithm = RR;
 
 int nextpid = 1;
 struct spinlock pid_lock;
@@ -751,13 +751,13 @@ int getProcTick(int pid){
 }
 
 // Added by ChamRun Moeini
-int getProcTurnaroundTicks(int pid){
+int getProcTurnaroundTicks(int pid){ //this system call should run at the end of the process
     struct proc *p;
     for(p = proc; p < &proc[NPROC]; p++) {
         if (p->pid == pid) {
             acquire(&tickslock);
             acquire(&p->lock);
-            int turnaroundTime = p->termination_tick - p->start_tick;
+            int turnaroundTime = ticks - p->start_tick; 
             release(&tickslock);
             release(&p->lock);
             return turnaroundTime;
@@ -774,18 +774,49 @@ int getProcWaitingTicks(int pid){
         if (p->pid == pid) {
             acquire(&tickslock);
             acquire(&p->lock);
-            int turnaroundTime = p->ready_tick;
+            int waiting_tick = p->sleeping_tick;
             release(&tickslock);
             release(&p->lock);
-            return turnaroundTime;
+            return waiting_tick;
         }
     }
+    return -1;
+}
+
+int getProcRunningTicks(int pid){
+      struct proc *p;
+    for(p = proc; p < &proc[NPROC]; p++) {
+        if (p->pid == pid) {
+            acquire(&tickslock);
+            acquire(&p->lock);
+            int running_tick = p->running_tick;
+            release(&tickslock);
+            release(&p->lock);
+            return running_tick;
+        }
+    }
+    return -1;
+}
+
+int getProcReadyTicks(int pid){
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++) {
+    if (p->pid == pid) {
+      acquire(&tickslock);
+      acquire(&p->lock);
+      int ready_tick = p->ready_tick;
+      release(&tickslock);
+      release(&p->lock);
+      return ready_tick;
+    }
+  }
     return -1;
 }
 
 int increase_procs_ticks(void){
   struct proc *p;
   for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
     if (p->state == SLEEPING){
       p->sleeping_tick ++;
     }
@@ -796,8 +827,9 @@ int increase_procs_ticks(void){
       p->running_tick++;
     }
     else if(p->state == ZOMBIE){
-      p->termination_tick = p->running_tick;
+      p->termination_tick = ticks;
     }
+    release(&p->lock);
   }
   return 0;
 }

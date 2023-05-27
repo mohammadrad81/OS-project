@@ -126,3 +126,15 @@ uint64 sys_sched_RR(void){
 uint64 sys_sched_FCFS(void){
   return sched_FCFS();
 }
+
+uint64 sys_getProcReadyTicks(void){
+  int pid;
+  argint(0, &pid);
+  return getProcReadyTicks(pid);
+}
+
+uint64 sys_getProcRunningTicks(void){
+  int pid;
+  argint(0, &pid);
+  return getProcRunningTicks(pid);
+}

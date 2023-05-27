@@ -4,13 +4,14 @@
 
 
 #define NUM_PROCESSES 32
-#define ARRAY_LENGTH 100
+#define ARRAY_LENGTH 10000
 
 
 void runProcesses();
 
 int main() {
 
+    sched_RR();
     runProcesses();
     sched_FCFS();
     runProcesses();
@@ -96,6 +97,6 @@ void runProcesses() {
     double avg_waiting_time = calculateAverage(waiting_times, NUM_PROCESSES);
 
     sleep(5);
-    printf("Average Waiting Time: %.2f microseconds\n", avg_waiting_time);
-    printf("Average Turnaround Time: %.2f microseconds\n", avg_turnaround_time);
+    printf("Average Waiting Time: %lf microseconds\n", avg_waiting_time);
+    printf("Average Turnaround Time: %lf microseconds\n", avg_turnaround_time);
 }

@@ -28,3 +28,5 @@
 #define SYS_sched_FCFS 25
 #define SYS_getProcTurnaroundTicks 26
 #define SYS_getProcWaitingTicks 27
+#define SYS_getProcReadyTicks 28
+#define SYS_getProcRunningTicks 29

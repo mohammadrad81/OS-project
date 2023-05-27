@@ -28,6 +28,8 @@ int uptime(void);
 int getProcTick(int);
 int getProcTurnaroundTicks(int);
 int getProcWaitingTicks(int);
+int getProcReadyTicks(int);
+int getProcRunningTicks(int);
 int sysinfo(uint64 addr);
 int sched_RR();
 int sched_FCFS();

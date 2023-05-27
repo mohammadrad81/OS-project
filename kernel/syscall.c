@@ -107,6 +107,8 @@ extern uint64 sys_getProcWaitingTicks(void);
 extern uint64 sys_sysinfo(void);
 extern uint64 sys_sched_RR(void);
 extern uint64 sys_sched_FCFS(void);
+extern uint64 sys_getProcReadyTicks(void);
+extern uint64 sys_getProcRunningTicks(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -137,7 +139,9 @@ static uint64 (*syscalls[])(void) = {
 [SYS_sched_RR] sys_sched_RR,
 [SYS_sched_FCFS] sys_sched_FCFS,
 [SYS_getProcTurnaroundTicks]  sys_getProcTurnaroundTicks,
-[SYS_getProcWaitingTicks]  sys_getProcWaitingTicks
+[SYS_getProcWaitingTicks]  sys_getProcWaitingTicks,
+[SYS_getProcReadyTicks] sys_getProcReadyTicks,
+[SYS_getProcRunningTicks] sys_getProcRunningTicks
 };
 
 void

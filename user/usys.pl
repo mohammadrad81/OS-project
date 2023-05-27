@@ -39,6 +39,8 @@ entry("uptime");
 entry("getProcTick");
 entry("getProcTurnaroundTicks");
 entry("getProcWaitingTicks");
+entry("getProcReadyTicks");
+entry("getProcRunningTicks");
 entry("sysinfo");
 entry("sched_RR");
 entry("sched_FCFS");
