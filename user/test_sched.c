@@ -43,7 +43,7 @@ void runProcesses(char* algorithm_name){
             printf("process with pid created: %d\n", my_pid);
             int sum = job();
             sum = sum;
-            // printf("%d\n", sum);
+            printf("%d\n", sum);
             printf("job for pid: %d done!\n", my_pid);
             close(fds[i][0]); //close read for child
             

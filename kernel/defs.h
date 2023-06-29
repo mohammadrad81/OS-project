@@ -67,6 +67,9 @@ void            kfree(void *);
 void            kinit(void);
 //Added by Mohammad Heydari Rad 9931017
 int             freeram(void);
+uint64              inc_refcnt(uint64);
+void                kref_lock(void);
+void                kref_unlock(void);
 
 // log.c
 void            initlog(int, struct superblock*);

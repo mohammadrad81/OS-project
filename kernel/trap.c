@@ -29,6 +29,49 @@ trapinithart(void)
   w_stvec((uint64)kernelvec);
 }
 
+// Added by Mohammad Heydari Rad & Chamrun Moini Naghde
+int cowtrap(pagetable_t pagetable, uint64 va){
+  // printf("in cowtrap for va: %d\n", (int)va);
+  if(va > MAXVA){
+    // printf("va > MAXMA error\n");
+    return -1;
+  }
+
+  pte_t *pte = walk(pagetable, va, 0);
+  if(pte == 0){
+    // printf("pte == 0 error\n");
+    return -1;
+  }
+
+  uint64 pa = PTE2PA(*pte);
+  if(pa == 0){
+    // printf("pa == 0 error");
+    return -1;
+  }
+  // if this page is copy-on-write
+  if(*pte & PTE_COW){
+    // printf("page is copy on write\n");
+    uint flags = PTE_FLAGS(*pte);
+    *pte = *pte | PTE_W;
+    *pte = *pte & ~PTE_COW;
+    flags = flags | PTE_W;
+    flags = flags & ~PTE_COW;
+    char *ka = kalloc();
+    if(ka == 0){
+      // printf("error occured during allocation\n");
+      return -1;
+    }
+    // copy the content of this page to new page ka
+    memmove(ka, (char*)pa, PGSIZE);
+    //free old memory mapping
+    uvmunmap(pagetable, PGROUNDDOWN(va), 1, 1);
+    //unset COW bit and set page writable bit
+    mappages(pagetable, va, PGSIZE, (uint64)ka, flags);
+  }
+
+  return 0;
+}
+
 //
 // handle an interrupt, exception, or system call from user space.
 // called from trampoline.S
@@ -65,6 +108,12 @@ usertrap(void)
     intr_on();
 
     syscall();
+  } else if(r_scause() == 15){
+    if (killed(p))
+      exit(-1);
+    uint64 va = r_stval();
+    if (cowtrap(p->pagetable, PGROUNDDOWN(va)) < 0)
+      p->killed = 1;
   } else if((which_dev = devintr()) != 0){
     // ok
   } else {

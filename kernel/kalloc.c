@@ -23,10 +23,51 @@ struct {
   struct run *freelist;
 } kmem;
 
+// Added by Mohammad Heydari Rad & Chamrun Moini Naghde
+
+static struct{
+  struct spinlock lock;
+  int cnt[(PHYSTOP-KERNBASE)/PGSIZE];
+} kref;
+
+static void set_refcnt(uint64 pa, int cnt){
+  kref.cnt[(int) PA2PAGE_INDEX(pa)] = cnt;
+}
+
+uint64 inc_refcnt(uint64 pa){
+  return ++kref.cnt[(int) PA2PAGE_INDEX(pa)];
+}
+
+uint64 dec_refcnt(uint64 pa){
+  return --kref.cnt[(int) PA2PAGE_INDEX(pa)];
+}
+
+void kref_lock(){
+  acquire(&kref.lock);
+}
+
+void kref_unlock(){
+  release(&kref.lock);
+}
+
+static void init_ref_cnt(){
+  kref_lock();
+  for(int i = 0; i < (PHYSTOP-KERNBASE)/PGSIZE; i++){
+    kref.cnt[i] = 0;
+  }
+  kref_unlock();
+}
+
+
+
 void
 kinit()
 {
   initlock(&kmem.lock, "kmem");
+  // Added by Mohammad Heydari Rad & Chamrun Moini Naghde
+  initlock(&kref.lock, "kref");
+  init_ref_cnt();
+
   freerange(end, (void*)PHYSTOP);
 }
 
@@ -51,6 +92,18 @@ kfree(void *pa)
   if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
     panic("kfree");
 
+  // Added by Mohammad Heydari Rad & Chamrun Moini Naghde
+  kref_lock();
+  int refcount = dec_refcnt((uint64)pa);
+  if(refcount > 0){
+    kref_unlock();
+    return;
+  }
+  else{
+    set_refcnt((uint64)pa, 0);
+  }
+  kref_unlock();
+  // printf("new refcount: %d\n", refcount);
   // Fill with junk to catch dangling refs.
   memset(pa, 1, PGSIZE);
 
@@ -76,8 +129,10 @@ kalloc(void)
     kmem.freelist = r->next;
   release(&kmem.lock);
 
-  if(r)
+  if(r){
     memset((char*)r, 5, PGSIZE); // fill with junk
+    set_refcnt((uint64)r, 1);
+  }
   return (void*)r;
 }
 
