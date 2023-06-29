@@ -344,6 +344,11 @@ typedef uint64 *pagetable_t; // 512 PTEs
 #define PTE_X (1L << 3)
 #define PTE_U (1L << 4) // user can access
 
+// Added by Mohammad Heydari Rad & Chamrun Moini Naghde
+#define PTE_COW (1L << 8)
+
+#define PA2PAGE_INDEX(pa) (((uint64)pa) >> 12)
+
 // shift a physical address to the right place for a PTE.
 #define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
 
